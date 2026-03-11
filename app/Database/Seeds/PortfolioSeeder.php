@@ -17,7 +17,7 @@ class PortfolioSeeder extends Seeder
             'photo' => '/assets/images/profile.jpg',
             'github_url' => 'https://github.com/gilangrizkyr',
             'instagram_url' => 'https://instagram.com/gilangrizkyr',
-            'email' => 'gilangrizkyr@gmail.com',
+            'email' => 'ikyappmastering@gmail.com',
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 

@@ -1,8 +1,11 @@
 <nav class="navbar">
     <a href="<?= base_url('/') ?>" class="navbar-logo" aria-label="Home">G.</a>
     <ul class="navbar-links">
-        <li><a href="<?= base_url('/#works') ?>">Works</a></li>
-        <li><a href="<?= base_url('projects') ?>">Projects</a></li>
-        <li><a href="https://github.com/gilangrizkyr" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="<?= base_url('/#works') ?>">Projects</a></li>
+        <?php
+        $navBio = $bio ?? [];
+        $navGH = is_array($navBio) ? ($navBio['github_url'] ?? 'https://github.com/gilangrizkyr') : ($navBio->github_url ?? 'https://github.com/gilangrizkyr');
+        ?>
+        <li><a href="<?= esc($navGH) ?>" target="_blank" rel="noopener">GitHub</a></li>
     </ul>
 </nav>

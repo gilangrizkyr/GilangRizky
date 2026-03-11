@@ -15,6 +15,7 @@ class BioModel extends Model
         'name',
         'title',
         'photo',
+        'lanyard_photo',
         'github_url',
         'instagram_url',
         'email',

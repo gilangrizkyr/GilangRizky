@@ -24,13 +24,15 @@ class CommentController extends BaseController
         $model->insert([
             'name' => $name ?: 'Anonymous',
             'text' => $text,
-            'approved' => 1,  // auto-approve untuk portfolio pribadi
+            'approved' => 0, // requires admin approval
         ]);
 
         $id = $model->getInsertID();
 
         return $this->response->setJSON([
             'success' => true,
+            'pending' => true,
+            'message' => 'Terima kasih! Komentar Anda sedang menunggu persetujuan admin.',
             'comment' => [
                 'id' => $id,
                 'name' => $name ?: 'Anonymous',

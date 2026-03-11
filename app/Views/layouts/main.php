@@ -14,6 +14,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="<?= base_url('favicon.png') ?>">
+
     <!-- CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
 
@@ -33,7 +36,7 @@
     </div>
 
     <!-- Navbar -->
-    <?= view('partials/navbar') ?>
+    <?= view('partials/navbar', isset($bio) ? ['bio' => $bio] : []) ?>
 
     <!-- Main Content -->
     <main>
@@ -44,7 +47,7 @@
     <?= view('partials/footer', isset($bio) ? ['bio' => $bio] : []) ?>
 
     <!-- Three.js CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js"></script>
 
     <!-- Main JS -->
     <script src="<?= base_url('assets/js/main.js') ?>"></script>

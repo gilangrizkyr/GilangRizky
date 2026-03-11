@@ -1,0 +1,15 @@
+.git
+.github
+tests
+phpunit.xml.dist
+spark
+writable/*
+!writable/index.html
+vendor/codeigniter4/framework/tests
+vendor/codeigniter4/framework/user_guide
+node_modules
+.env
+phpstan.neon
+phpunit.xml
+composer.lock
+docs

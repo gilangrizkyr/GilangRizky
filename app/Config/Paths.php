@@ -55,6 +55,15 @@ class Paths
      */
     public string $writableDirectory = __DIR__ . '/../../writable';
 
+    public function __construct()
+    {
+        // On Vercel, the filesystem is read-only.
+        // We must use /tmp for logs, cache, and sessions to avoid 500 errors.
+        if (isset($_SERVER['VERCEL'])) {
+            $this->writableDirectory = '/tmp';
+        }
+    }
+
     /**
      * ---------------------------------------------------------------
      * TESTS DIRECTORY NAME

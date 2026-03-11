@@ -29,7 +29,6 @@ const initAnimations = () => {
         scrollObserver.observe(el);
     });
 };
-initAnimations();
 
 /* ─── ULTRA-SMOOTH 3D SCROLL ENGINE (OPTIMIZED) ────── */
 const state = {
@@ -39,7 +38,7 @@ const state = {
     targets: []
 };
 
-// Cache elements and their properties to avoid repeated DOM hits
+// Cache elements and their properties
 const cacheElements = () => {
     state.targets = Array.from(document.querySelectorAll('.scroll-tilt')).map(el => ({
         el,
@@ -48,16 +47,19 @@ const cacheElements = () => {
     }));
 };
 
-window.addEventListener('scroll', () => {
+const handleScroll = () => {
     const winScroll = window.pageYOffset || document.documentElement.scrollTop;
-    const scrollHeight = document.documentElement.scrollHeight - state.winHeight;
-    state.scrollPerc = winScroll / scrollHeight;
-}, { passive: true });
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    // Fix NaN if scrollHeight is 0
+    state.scrollPerc = scrollHeight > 0 ? Math.max(0, Math.min(1, winScroll / scrollHeight)) : 0;
+};
+
+window.addEventListener('scroll', handleScroll, { passive: true });
 
 const update3DEffects = () => {
     // 1. Lerp scroll for buttery movement
     state.lerpedScroll += (state.scrollPerc - state.lerpedScroll) * 0.1;
-    document.documentElement.style.setProperty('--scroll-perc', state.lerpedScroll);
+    document.documentElement.style.setProperty('--scroll-perc', state.lerpedScroll.toFixed(4));
 
     // 2. Global Perspective Origin Shift (More subtle for stability)
     const originY = 50 + (state.lerpedScroll * 25);
@@ -87,14 +89,61 @@ const update3DEffects = () => {
     requestAnimationFrame(update3DEffects);
 };
 
-// Initial run
-cacheElements();
-update3DEffects();
+// Initialize on load
+document.addEventListener('DOMContentLoaded', () => {
+    initAnimations();
+    cacheElements();
+    update3DEffects();
+    handleScroll(); // Initial position
+});
 
 window.addEventListener('resize', () => {
     state.winHeight = window.innerHeight;
     cacheElements(); // Re-cache if layout changes
 });
+
+/* ─── MODERN TOAST NOTIFICATION ─────────────────── */
+const showToast = (message, type = 'info') => {
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `glass-toast ${type}`;
+
+    // Icon selection based on type
+    let icon = '';
+    if (type === 'success') {
+        icon = `<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5" /></svg>`;
+    } else if (type === 'error') {
+        icon = `<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>`;
+    } else {
+        icon = `<svg class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>`;
+    }
+
+    toast.innerHTML = `${icon}<span>${message}</span>`;
+    container.appendChild(toast);
+
+    // Animate in - reliable timeout
+    setTimeout(() => toast.classList.add('active'), 50);
+
+    // Click to dismiss
+    toast.addEventListener('click', () => {
+        toast.classList.remove('active');
+        setTimeout(() => toast.remove(), 500);
+    });
+
+    // Decay
+    setTimeout(() => {
+        if (toast.parentElement) {
+            toast.classList.remove('active');
+            setTimeout(() => toast.remove(), 500);
+        }
+    }, 5000);
+};
 
 /* ─── MOUSE PARALLAX ────────────────────────────────── */
 const heroTitle = document.querySelector('.hero-title');
@@ -121,35 +170,66 @@ const commentList = document.getElementById('comment-list');
 if (commentForm) {
     commentForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = commentForm.querySelector('.comment-submit');
-        const name = commentForm.querySelector('#comment-name').value.trim();
-        const text = commentForm.querySelector('#comment-text').value.trim();
-        if (!text) return;
+        const btn = commentForm.querySelector('.premium-submit');
+        const nameInput = commentForm.querySelector('.minimal-input');
+        const textarea = commentForm.querySelector('.minimal-textarea');
+        const name = nameInput.value.trim();
+        const text = textarea.value.trim();
+
+        if (!text) {
+            textarea.classList.add('error-shake');
+            showToast('Harap tuliskan pesan Anda.', 'error');
+            setTimeout(() => textarea.classList.remove('error-shake'), 500);
+            return;
+        }
 
         btn.disabled = true;
-        btn.textContent = 'Mengirim...';
+        btn.classList.add('dispatching');
+        commentForm.classList.add('dispatching');
+        const btnSpan = btn.querySelector('span');
+        if (btnSpan) btnSpan.textContent = 'Mengirim...';
 
         try {
-            const fd = new FormData();
-            fd.append('name', name || 'Anonymous');
-            fd.append('text', text);
+            const fd = new FormData(commentForm);
+            if (!fd.get('name')) fd.set('name', 'Anonymous');
 
-            const res = await fetch('/comments', { method: 'POST', body: fd });
+            // Add minimum wait time (1.4s) for professional 3D feel
+            const minWait = new Promise(resolve => setTimeout(resolve, 1400));
+            const fetchCall = fetch('/comments', {
+                method: 'POST',
+                body: fd,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+
+            const [res] = await Promise.all([fetchCall, minWait]);
             const data = await res.json();
 
             if (data.success) {
-                prependComment(data.comment);
+                commentForm.classList.remove('dispatching');
+                commentForm.classList.add('success-blast');
+                setTimeout(() => commentForm.classList.remove('success-blast'), 1000);
+
+                if (data.pending) {
+                    showToast(data.message || 'Terima kasih! Pesan Anda sedang menunggu persetujuan.', 'success');
+                } else {
+                    prependComment(data.comment);
+                    showToast('Pesan berhasil terdeploy!', 'success');
+                }
                 commentForm.reset();
 
-                // Remove empty notice if present
-                const notice = commentList.querySelector('.no-comments');
+                const notice = commentList.querySelector('.no-comments-v2');
                 if (notice) notice.remove();
+            } else {
+                showToast(data.message || 'Gagal mengirim pesan.', 'error');
             }
         } catch (err) {
             console.error('Comment error:', err);
+            showToast('Kesalahan saat mengirim pesan. Silakan coba lagi.', 'error');
         } finally {
             btn.disabled = false;
-            btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg> Post`;
+            btn.classList.remove('dispatching');
+            commentForm.classList.remove('dispatching');
+            btn.innerHTML = `<span>Send Comments</span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>`;
         }
     });
 }
@@ -174,6 +254,9 @@ function prependComment(c) {
     </div>
   `;
     commentList.prepend(div);
+
+    // Auto-scroll to top of list
+    commentList.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function escHtml(str) {
@@ -346,19 +429,32 @@ function escHtml(str) {
         }
 
         card.position.copy(cardPos);
-        // Billboard: always face camera
-        card.lookAt(camera.position);
-        card.rotation.x = 0; card.rotation.y = 0;
 
-        // Rebuild lanyard
+        // Correct Billboarding: Face camera but allow for physics-based tilt
+        // We calculate a baseline rotation to face the camera, 
+        // then we can apply physics-based perturbations if needed.
+        card.quaternion.copy(camera.quaternion);
+
+        // Add a subtle wobble based on velocity for more "weight"
+        const tiltX = cardVel.y * 2;
+        const tiltY = -cardVel.x * 2;
+        card.rotateX(tiltX);
+        card.rotateY(tiltY);
+
+        // Rebuild lanyard with smoother, more accurate points
         scene.remove(lanyardMesh);
         lanyardMesh.geometry.dispose();
+
+        // The lanyard should attach to the top center of the card
+        const attachPoint = new THREE.Vector3(0, 1.75, 0); // Top of 3.5 height card
+        attachPoint.applyMatrix4(card.matrixWorld);
+
         const midX = (cardPos.x * 0.5);
         lanyardMesh = makeLanyard([
             new THREE.Vector3(0, anchorY, 0),
-            new THREE.Vector3(midX * 0.6, anchorY - 1.2, 0.1),
-            new THREE.Vector3(cardPos.x * 0.8, cardPos.y + 2, 0),
-            new THREE.Vector3(cardPos.x, cardPos.y + 1.7, 0),
+            new THREE.Vector3(midX * 0.4, anchorY - 1.0, 0.2),
+            new THREE.Vector3(attachPoint.x * 0.8, attachPoint.y + 0.5, attachPoint.z * 0.5),
+            attachPoint,
         ]);
         scene.add(lanyardMesh);
 
