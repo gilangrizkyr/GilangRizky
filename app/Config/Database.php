@@ -51,6 +51,18 @@ class Database extends Config
         ],
     ];
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Override with Environment Variables for Vercel (no dots allowed in Vercel keys)
+        if ($envHost = env('DB_HOSTNAME')) $this->default['hostname'] = $envHost;
+        if ($envUser = env('DB_USERNAME')) $this->default['username'] = $envUser;
+        if ($envPass = env('DB_PASSWORD')) $this->default['password'] = $envPass;
+        if ($envDb   = env('DB_DATABASE')) $this->default['database'] = $envDb;
+        if ($envPort = env('DB_PORT'))     $this->default['port']     = $envPort;
+        if ($envDriver = env('DB_DRIVER')) $this->default['DBDriver'] = $envDriver;
+
     //    /**
     //     * Sample database connection for SQLite3.
     //     *
