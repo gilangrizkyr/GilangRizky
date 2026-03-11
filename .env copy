@@ -1,6 +1,6 @@
 CI_ENVIRONMENT = production
 
-app.baseURL = ''
+app.baseURL = 'https://gilang-rizky.vercel.app/'
 
 database.default.hostname = db.uhsufsqszlrtinxnhqum.supabase.co
 database.default.database = postgres
