@@ -6,6 +6,11 @@
  * to the CodeIgniter 4 front controller.
  */
 
+// Force development mode for debugging Vercel issues
+// REMOVE THIS AFTER BUG IS FIXED
+if (!defined('CI_ENVIRONMENT')) {
+    define('CI_ENVIRONMENT', 'development');
+}
+
 // Include the public index file directly
-// FCPATH will be defined in public/index.php as current directory
 require __DIR__ . '/../public/index.php';
