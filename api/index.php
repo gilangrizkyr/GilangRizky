@@ -2,24 +2,18 @@
 
 /**
  * Vercel Bridge for CodeIgniter 4
- * Diagnostic version - outputs early debug info
+ * Debug version - forces development mode to show detailed errors
  */
 
-// Force error reporting
+// CRITICAL FIX: Set as $_SERVER and $_ENV, NOT as define()
+// CI4 reads from $_ENV['CI_ENVIRONMENT'], not from PHP constants.
+$_ENV['CI_ENVIRONMENT'] = 'development';
+$_SERVER['CI_ENVIRONMENT'] = 'development';
+
+// Force PHP error reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
-// Output early diagnostic
-echo "<?php start OK ?>\n";
-echo "PHP Version: " . PHP_VERSION . "\n";
-echo "Extensions: " . implode(', ', get_loaded_extensions()) . "\n";
-echo "pgsql: " . (extension_loaded('pgsql') ? 'YES' : 'NO') . "\n";
-echo "pdo_pgsql: " . (extension_loaded('pdo_pgsql') ? 'YES' : 'NO') . "\n";
-
-// Check if vendor exists
-$vendorPath = __DIR__ . '/../vendor/autoload.php';
-echo "Vendor exists: " . (file_exists($vendorPath) ? 'YES' : 'NO') . "\n";
 
 // Include the public index file directly
 require __DIR__ . '/../public/index.php';
