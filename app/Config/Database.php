@@ -205,12 +205,13 @@ class Database extends Config
         if ($envDb = env('DB_DATABASE'))
             $this->default['database'] = $envDb;
         if ($envPort = env('DB_PORT'))
-            $this->default['port'] = $envPort;
+            $this->default['port'] = (int) $envPort; // MUST cast to int
         if ($envDriver = env('DB_DRIVER')) {
             $this->default['DBDriver'] = $envDriver;
             // PostgreSQL uses 'utf8', not 'utf8mb4'
             if ($envDriver === 'Postgre') {
                 $this->default['charset'] = 'utf8';
+                $this->default['schema'] = 'public';
             }
         }
 
