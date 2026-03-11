@@ -84,7 +84,9 @@ phpunit
 #-------------------------
 # Composer
 #-------------------------
-vendor/
+# vendor/ is intentionally included so Vercel can deploy the CodeIgniter framework.
+# On Vercel, composer install cannot run automatically.
+# vendor/
 
 #-------------------------
 # IDE / Development Files
