@@ -22,12 +22,11 @@ class CreateSessionsTable extends Migration
             'timestamp' => [
                 'type' => 'INT',
                 'constraint' => 10,
-                'unsigned' => true,
                 'default' => 0,
                 'null' => false,
             ],
             'data' => [
-                'type' => 'BLOB',
+                'type' => 'TEXT',
                 'null' => false,
             ],
         ]);

@@ -10,40 +10,39 @@ class CreateBioTable extends Migration
     {
         $this->forge->addField([
             'id' => [
-                'type'           => 'INT',
-                'constraint'     => 11,
-                'unsigned'       => true,
+                'type' => 'INT',
+                'constraint' => 11,
                 'auto_increment' => false,
-                'default'        => 1,
+                'default' => 1,
             ],
             'name' => [
-                'type'       => 'VARCHAR',
+                'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
             'title' => [
-                'type'       => 'VARCHAR',
+                'type' => 'VARCHAR',
                 'constraint' => 255,
-                'null'       => true,
+                'null' => true,
             ],
             'photo' => [
-                'type'       => 'VARCHAR',
+                'type' => 'VARCHAR',
                 'constraint' => 500,
-                'null'       => true,
+                'null' => true,
             ],
             'github_url' => [
-                'type'       => 'VARCHAR',
+                'type' => 'VARCHAR',
                 'constraint' => 500,
-                'null'       => true,
+                'null' => true,
             ],
             'instagram_url' => [
-                'type'       => 'VARCHAR',
+                'type' => 'VARCHAR',
                 'constraint' => 500,
-                'null'       => true,
+                'null' => true,
             ],
             'email' => [
-                'type'       => 'VARCHAR',
+                'type' => 'VARCHAR',
                 'constraint' => 255,
-                'null'       => true,
+                'null' => true,
             ],
             'updated_at' => [
                 'type' => 'TIMESTAMP',

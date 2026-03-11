@@ -12,7 +12,6 @@ class CreateProjectsTable extends Migration
             'id' => [
                 'type' => 'INT',
                 'constraint' => 11,
-                'unsigned' => true,
                 'auto_increment' => true,
             ],
             'title' => [
@@ -33,7 +32,7 @@ class CreateProjectsTable extends Migration
                 'null' => true,
             ],
             'body' => [
-                'type' => 'LONGTEXT',
+                'type' => 'TEXT',
                 'null' => true,
             ],
             'tech_stack' => [

@@ -12,7 +12,6 @@ class CreateCommentsTable extends Migration
             'id' => [
                 'type' => 'INT',
                 'constraint' => 11,
-                'unsigned' => true,
                 'auto_increment' => true,
             ],
             'name' => [
@@ -23,7 +22,7 @@ class CreateCommentsTable extends Migration
                 'type' => 'TEXT',
             ],
             'approved' => [
-                'type' => 'TINYINT',
+                'type' => 'SMALLINT',
                 'constraint' => 1,
                 'default' => 0,
             ],
