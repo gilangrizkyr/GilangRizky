@@ -58,8 +58,12 @@ class Paths
     public function __construct()
     {
         // On Vercel, the filesystem is read-only.
-        // We must use /tmp for logs, cache, and sessions to avoid 500 errors.
-        if (isset($_SERVER['VERCEL'])) {
+        // Vercel sets VERCEL env var but it may be in $_ENV not $_SERVER.
+        // Best approach: check if writable dir is actually writable, if not use /tmp.
+        $isOnVercel = isset($_ENV['VERCEL']) || getenv('VERCEL') !== false;
+        $writableDirExists = is_dir($this->writableDirectory) && is_writable($this->writableDirectory);
+
+        if ($isOnVercel || !$writableDirExists) {
             $this->writableDirectory = '/tmp';
         }
     }
