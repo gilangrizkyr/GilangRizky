@@ -44,10 +44,10 @@ class Bio extends BaseController
             // Compress and Resize using CI4 Image service
             \Config\Services::image()
                 ->withFile($tempPath)
-                ->resize(1200, 1200, true, 'height')
-                ->save($tempPath, 70);
+                ->resize(800, 800, true, 'height')
+                ->save($tempPath, 60);
 
-            $type = $heroImg->getClientMimeType();
+            $type = 'image/jpeg';
             $data = file_get_contents($tempPath);
             $heroPath = 'data:' . $type . ';base64,' . base64_encode($data);
         }
@@ -62,10 +62,10 @@ class Bio extends BaseController
             // Compress and Resize
             \Config\Services::image()
                 ->withFile($tempPath)
-                ->resize(800, 800, true, 'height')
-                ->save($tempPath, 70);
+                ->resize(400, 400, true, 'height')
+                ->save($tempPath, 60);
 
-            $type = $lanyardImg->getClientMimeType();
+            $type = 'image/jpeg';
             $data = file_get_contents($tempPath);
             $lanyardPath = 'data:' . $type . ';base64,' . base64_encode($data);
         }
@@ -81,9 +81,9 @@ class Bio extends BaseController
             \Config\Services::image()
                 ->withFile($tempPath)
                 ->resize(1200, 630, true)
-                ->save($tempPath, 75);
+                ->save($tempPath, 60);
 
-            $type = $ogImg->getClientMimeType();
+            $type = 'image/jpeg';
             $data = file_get_contents($tempPath);
             $ogPath = 'data:' . $type . ';base64,' . base64_encode($data);
         }
