@@ -35,8 +35,8 @@ $lastName = !empty($otherNames) ? esc(strtoupper(implode(' ', $otherNames))) : '
             </h1>
 
             <p class="hero-desc reveal-3d">
-                High-End Creative Engineering &amp;<br>
-                <strong>Modern Web Architecture.</strong>
+                Building Scalable Web Applications &amp;<br>
+                <strong>Modern Full-Stack Development.</strong>
             </p>
 
             <div class="hero-btns reveal-3d">
