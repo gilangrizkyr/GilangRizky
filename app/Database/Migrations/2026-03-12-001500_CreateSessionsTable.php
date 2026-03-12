@@ -20,9 +20,7 @@ class CreateSessionsTable extends Migration
                 'null' => false,
             ],
             'timestamp' => [
-                'type' => 'INT',
-                'constraint' => 10,
-                'default' => 0,
+                'type' => 'TIMESTAMP',
                 'null' => false,
             ],
             'data' => [
