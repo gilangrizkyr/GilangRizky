@@ -25,7 +25,7 @@ class OptimizeBase64Images extends BaseCommand
             foreach (['photo', 'lanyard_photo', 'og_image'] as $field) {
                 if (isset($bio[$field]) && str_starts_with($bio[$field], 'data:image')) {
                     $oldSize = strlen($bio[$field]);
-                    $bio[$field] = $this->optimize($bio[$field], ($field === 'lanyard_photo' ? 400 : 800));
+                    $bio[$field] = $this->optimize($bio[$field], ($field === 'lanyard_photo' ? 400 : 1200));
                     $newSize = strlen($bio[$field]);
                     CLI::write("- Managed $field: " . round($oldSize / 1024) . "KB -> " . round($newSize / 1024) . "KB", 'green');
                     $updated = true;
@@ -42,7 +42,7 @@ class OptimizeBase64Images extends BaseCommand
         foreach ($projects as $p) {
             if (isset($p['main_image']) && str_starts_with($p['main_image'], 'data:image')) {
                 $oldSize = strlen($p['main_image']);
-                $p['main_image'] = $this->optimize($p['main_image'], 800);
+                $p['main_image'] = $this->optimize($p['main_image'], 1200);
                 $newSize = strlen($p['main_image']);
                 CLI::write("- Project {$p['id']}: " . round($oldSize / 1024) . "KB -> " . round($newSize / 1024) . "KB", 'green');
                 $projectModel->update($p['id'], ['main_image' => $p['main_image']]);
@@ -67,13 +67,13 @@ class OptimizeBase64Images extends BaseCommand
             $image = \Config\Services::image()
                 ->withFile($tempFile);
 
-            // Only resize if width > maxWidth
-            if ($image->getWidth() > $maxWidth) {
-                $image->resize($maxWidth, $maxWidth, true, 'height');
+            // Only resize if either dimension > maxWidth
+            if ($image->getWidth() > $maxWidth || $image->getHeight() > $maxWidth) {
+                $image->resize($maxWidth, $maxWidth, true, 'auto');
             }
 
-            // Save as JPEG with 60% quality
-            $image->save($tempFile, 60);
+            // Save as JPEG with 70% quality
+            $image->save($tempFile, 70);
 
             $optimizedData = file_get_contents($tempFile);
             unlink($tempFile);

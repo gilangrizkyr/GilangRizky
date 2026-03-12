@@ -44,8 +44,8 @@ class Projects extends BaseController
             // Compress and Resize
             \Config\Services::image()
                 ->withFile($tempPath)
-                ->resize(800, 800, true, 'height')
-                ->save($tempPath, 60);
+                ->resize(1200, 1200, true, 'auto')
+                ->save($tempPath, 70);
 
             $type = 'image/jpeg';
             $data = file_get_contents($tempPath);
@@ -107,10 +107,10 @@ class Projects extends BaseController
             // Compress and Resize
             \Config\Services::image()
                 ->withFile($tempPath)
-                ->resize(1200, 1200, true, 'height')
+                ->resize(1200, 1200, true, 'auto')
                 ->save($tempPath, 70);
 
-            $type = $img->getClientMimeType();
+            $type = 'image/jpeg';
             $data = file_get_contents($tempPath);
             $imgName = 'data:' . $type . ';base64,' . base64_encode($data);
         }

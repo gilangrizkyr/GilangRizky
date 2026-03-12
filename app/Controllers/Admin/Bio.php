@@ -44,8 +44,8 @@ class Bio extends BaseController
             // Compress and Resize using CI4 Image service
             \Config\Services::image()
                 ->withFile($tempPath)
-                ->resize(800, 800, true, 'height')
-                ->save($tempPath, 60);
+                ->resize(1200, 1200, true, 'auto')
+                ->save($tempPath, 70);
 
             $type = 'image/jpeg';
             $data = file_get_contents($tempPath);
@@ -62,8 +62,8 @@ class Bio extends BaseController
             // Compress and Resize
             \Config\Services::image()
                 ->withFile($tempPath)
-                ->resize(400, 400, true, 'height')
-                ->save($tempPath, 60);
+                ->resize(800, 800, true, 'auto')
+                ->save($tempPath, 70);
 
             $type = 'image/jpeg';
             $data = file_get_contents($tempPath);
