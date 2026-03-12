@@ -19,6 +19,7 @@ class BioModel extends Model
         'github_url',
         'instagram_url',
         'email',
+        'og_image',
     ];
 
     protected $useTimestamps = true;

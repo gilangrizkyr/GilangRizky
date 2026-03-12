@@ -10,6 +10,27 @@
         <?= isset($page_title) ? esc($page_title) . ' | ' : '' ?>Gilang Rizky | Portfolio
     </title>
 
+    <!-- Open Graph / Facebook -->
+    <?php
+    $ogTitle = isset($page_title) ? esc($page_title) . ' | Gilang Rizky' : 'Gilang Rizky | Full-Stack Developer';
+    $ogDesc = isset($meta_desc) ? esc($meta_desc) : 'Portfolio Gilang Rizky – Full-Stack Developer & Creative Engineer';
+    $ogImg = (isset($bio['og_image']) && !empty($bio['og_image']))
+        ? ((str_starts_with($bio['og_image'], 'http') || str_starts_with($bio['og_image'], 'data:')) ? esc($bio['og_image']) : base_url(esc($bio['og_image'])))
+        : base_url('assets/images/og-preview.png');
+    ?>
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?= current_url() ?>">
+    <meta property="og:title" content="<?= $ogTitle ?>">
+    <meta property="og:description" content="<?= $ogDesc ?>">
+    <meta property="og:image" content="<?= $ogImg ?>">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="<?= current_url() ?>">
+    <meta property="twitter:title" content="<?= $ogTitle ?>">
+    <meta property="twitter:description" content="<?= $ogDesc ?>">
+    <meta property="twitter:image" content="<?= $ogImg ?>">
+
     <!-- Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
