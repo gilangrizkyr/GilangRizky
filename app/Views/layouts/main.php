@@ -29,9 +29,18 @@
     <meta property="twitter:description" content="<?= $ogDesc ?>">
     <meta property="twitter:image" content="<?= $ogImg ?>">
 
-    <!-- Preconnect -->
+    <!-- Preconnect & DNS-Prefetch -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
+    <!-- Preload LCP Image -->
+    <?php if (isset($bio['photo']) && $bio['photo']): ?>
+        <link rel="preload" as="image"
+            href="<?= (str_starts_with($bio['photo'], 'http') || str_starts_with($bio['photo'], 'data:')) ? esc($bio['photo']) : base_url(esc($bio['photo'])) ?>"
+            fetchpriority="high">
+    <?php endif; ?>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="<?= base_url('favicon.png') ?>">
@@ -65,11 +74,11 @@
     <!-- Footer -->
     <?= view('partials/footer', isset($bio) ? ['bio' => $bio] : []) ?>
 
-    <!-- Three.js CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js"></script>
+    <!-- Three.js CDN (Deferred) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js" defer></script>
 
-    <!-- Main JS -->
-    <script src="<?= base_url('assets/js/main.js') ?>"></script>
+    <!-- Main JS (Deferred) -->
+    <script src="<?= base_url('assets/js/main.js') ?>" defer></script>
 
     <?= $this->renderSection('scripts') ?>
 </body>

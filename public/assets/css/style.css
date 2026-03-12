@@ -82,6 +82,8 @@ body::before {
     pointer-events: none;
     overflow: hidden;
     contain: strict;
+    /* Prevent layout shifts from fixed background */
+    will-change: transform;
 }
 
 main {
@@ -405,9 +407,12 @@ main {
     position: relative;
     width: 380px;
     height: 380px;
+    aspect-ratio: 1 / 1;
     border-radius: 1.5rem;
     overflow: hidden;
     border: 1px solid var(--border);
+    background: var(--bg-card);
+    /* Placeholder while loading */
 }
 
 .hero-photo img {
@@ -700,6 +705,7 @@ section {
     width: 100%;
     /* Fill the wrapper */
     aspect-ratio: 16/10;
+    height: auto;
     border-radius: 3rem;
     overflow: hidden;
     border: 1px solid var(--border);

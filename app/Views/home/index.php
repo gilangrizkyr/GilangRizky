@@ -51,7 +51,7 @@ $lastName = !empty($otherNames) ? esc(strtoupper(implode(' ', $otherNames))) : '
             <div class="hero-photo scroll-tilt parallax-wrap glass-panel-3d">
                 <?php if ($bioPhoto): ?>
                     <img src="<?= (str_starts_with($bioPhoto, 'http') || str_starts_with($bioPhoto, 'data:')) ? esc($bioPhoto) : base_url(esc($bioPhoto)) ?>"
-                        alt="<?= esc($bioName) ?>" class="parallax-layer">
+                        alt="<?= esc($bioName) ?>" class="parallax-layer" width="380" height="380">
                 <?php else: ?>
                     <div class="hero-photo-placeholder">G.</div>
                 <?php endif; ?>
@@ -88,36 +88,40 @@ $lastName = !empty($otherNames) ? esc(strtoupper(implode(' ', $otherNames))) : '
         <!-- Row 1: Left -->
         <div class="marquee-track">
             <div class="marquee-content">
-                <?php foreach ($row1 as $skill):
-                    $icon = is_array($skill) ? ($skill['external_icon_url'] ?? $skill['icon'] ?? '') : ($skill->external_icon_url ?? $skill->icon ?? '');
-                    $name = is_array($skill) ? ($skill['title'] ?? '') : ($skill->title ?? ''); ?>
-                    <div class="skill-card">
-                        <?php if ($icon): ?>
-                            <img src="<?= esc($icon) ?>" alt="<?= esc($name) ?>" loading="lazy">
-                        <?php endif; ?>
-                        <span>
-                            <?= esc($name) ?>
-                        </span>
-                    </div>
-                <?php endforeach; ?>
+                <?php for ($i = 0; $i < 2; $i++): // Duplicate for seamless loop ?>
+                    <?php foreach ($row1 as $skill):
+                        $icon = is_array($skill) ? ($skill['external_icon_url'] ?? $skill['icon'] ?? '') : ($skill->external_icon_url ?? $skill->icon ?? '');
+                        $name = is_array($skill) ? ($skill['title'] ?? '') : ($skill->title ?? ''); ?>
+                        <div class="skill-card">
+                            <?php if ($icon): ?>
+                                <img src="<?= esc($icon) ?>" alt="<?= esc($name) ?>" loading="lazy" width="32" height="32">
+                            <?php endif; ?>
+                            <span>
+                                <?= esc($name) ?>
+                            </span>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endfor; ?>
             </div>
         </div>
 
         <!-- Row 2: Right -->
         <div class="marquee-track">
             <div class="marquee-content reverse">
-                <?php foreach ($row2 as $skill):
-                    $icon = is_array($skill) ? ($skill['external_icon_url'] ?? $skill['icon'] ?? '') : ($skill->external_icon_url ?? $skill->icon ?? '');
-                    $name = is_array($skill) ? ($skill['title'] ?? '') : ($skill->title ?? ''); ?>
-                    <div class="skill-card">
-                        <?php if ($icon): ?>
-                            <img src="<?= esc($icon) ?>" alt="<?= esc($name) ?>" loading="lazy">
-                        <?php endif; ?>
-                        <span>
-                            <?= esc($name) ?>
-                        </span>
-                    </div>
-                <?php endforeach; ?>
+                <?php for ($i = 0; $i < 2; $i++): // Duplicate for seamless loop ?>
+                    <?php foreach ($row2 as $skill):
+                        $icon = is_array($skill) ? ($skill['external_icon_url'] ?? $skill['icon'] ?? '') : ($skill->external_icon_url ?? $skill->icon ?? '');
+                        $name = is_array($skill) ? ($skill['title'] ?? '') : ($skill->title ?? ''); ?>
+                        <div class="skill-card">
+                            <?php if ($icon): ?>
+                                <img src="<?= esc($icon) ?>" alt="<?= esc($name) ?>" loading="lazy" width="32" height="32">
+                            <?php endif; ?>
+                            <span>
+                                <?= esc($name) ?>
+                            </span>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endfor; ?>
             </div>
         </div>
     </div>
@@ -160,7 +164,7 @@ $lastName = !empty($otherNames) ? esc(strtoupper(implode(' ', $otherNames))) : '
                         <div class="project-image glass-panel-3d">
                             <?php if ($pimg): ?>
                                 <img src="<?= (str_starts_with($pimg, 'http') || str_starts_with($pimg, 'data:')) ? esc($pimg) : base_url(esc($pimg)) ?>"
-                                    alt="<?= esc($ptitle) ?>" loading="lazy">
+                                    alt="<?= esc($ptitle) ?>" loading="lazy" width="800" height="500">
                             <?php else: ?>
                                 <div
                                     style="width:100%;height:100%;background:#0a0a0a;display:flex;align-items:center;justify-content:center;color:#333;font-style:italic;font-size:.8rem;">

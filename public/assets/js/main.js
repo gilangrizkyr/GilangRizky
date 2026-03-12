@@ -58,12 +58,14 @@ window.addEventListener('scroll', handleScroll, { passive: true });
 
 const update3DEffects = () => {
     // 1. Lerp scroll for buttery movement
-    state.lerpedScroll += (state.scrollPerc - state.lerpedScroll) * 0.1;
-    document.documentElement.style.setProperty('--scroll-perc', state.lerpedScroll.toFixed(4));
+    if (Math.abs(state.scrollPerc - state.lerpedScroll) > 0.0001) {
+        state.lerpedScroll += (state.scrollPerc - state.lerpedScroll) * 0.1;
+        document.documentElement.style.setProperty('--scroll-perc', state.lerpedScroll.toFixed(4));
 
-    // 2. Global Perspective Origin Shift (More subtle for stability)
-    const originY = 50 + (state.lerpedScroll * 25);
-    document.body.style.perspectiveOrigin = `50% ${originY}%`;
+        // 2. Global Perspective Origin Shift (More subtle for stability)
+        const originY = 50 + (state.lerpedScroll * 25);
+        document.body.style.perspectiveOrigin = `50% ${originY}%`;
+    }
 
     // 3. Batch process tilts from cache
     for (let i = 0; i < state.targets.length; i++) {
@@ -158,10 +160,8 @@ if (heroTitle) {
     });
 }
 
-/* ─── SKILLS MARQUEE CLONE ──────────────────────────── */
-document.querySelectorAll('.marquee-content').forEach(el => {
-    el.innerHTML += el.innerHTML; // duplicate for seamless loop
-});
+/* ─── SKILLS MARQUEE CLONE (REMOVED JS IN FAVOR OF CSS) ─── */
+// Duplication is now handled via PHP loops in the view for better performance
 
 /* ─── COMMENT FORM (AJAX) ───────────────────────────── */
 const commentForm = document.getElementById('comment-form');
