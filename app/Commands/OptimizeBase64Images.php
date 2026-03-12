@@ -39,13 +39,22 @@ class OptimizeBase64Images extends BaseCommand
 
         CLI::write('Optimizing Projects images...', 'yellow');
         $projects = $projectModel->findAll();
+        CLI::write("Found " . count($projects) . " projects.", 'cyan');
+
         foreach ($projects as $p) {
-            if (isset($p['main_image']) && str_starts_with($p['main_image'], 'data:image')) {
-                $oldSize = strlen($p['main_image']);
-                $p['main_image'] = $this->optimize($p['main_image'], 1200);
-                $newSize = strlen($p['main_image']);
-                CLI::write("- Project {$p['id']}: " . round($oldSize / 1024) . "KB -> " . round($newSize / 1024) . "KB", 'green');
-                $projectModel->update($p['id'], ['main_image' => $p['main_image']]);
+            $id = is_array($p) ? ($p['id'] ?? 'unknown') : ($p->id ?? 'unknown');
+            $title = is_array($p) ? ($p['title'] ?? 'untitled') : ($p->title ?? 'untitled');
+            $img = is_array($p) ? ($p['main_image'] ?? '') : ($p->main_image ?? '');
+
+            if ($img && str_starts_with($img, 'data:image')) {
+                $oldSize = strlen($img);
+                $newImg = $this->optimize($img, 1200);
+                $newSize = strlen($newImg);
+
+                CLI::write("- Project $id ($title): " . round($oldSize / 1024) . "KB -> " . round($newSize / 1024) . "KB", 'green');
+                $projectModel->update($id, ['main_image' => $newImg]);
+            } else {
+                CLI::write("- Project $id ($title): Skipping (Not Base64 or empty)", 'white');
             }
         }
 
