@@ -26,20 +26,20 @@
     ],
     "rewrites": [
         {
-            "src": "/(favicon\\.(ico|png)|robots\\.txt)",
-            "dest": "/public/$1"
+            "source": "/(favicon\\.(ico|png)|robots\\.txt)",
+            "destination": "/public/$1"
         },
         {
-            "src": "/assets/(.*)",
-            "dest": "/public/assets/$1"
+            "source": "/assets/(.*)",
+            "destination": "/public/assets/$1"
         },
         {
-            "src": "/uploads/(.*)",
-            "dest": "/public/uploads/$1"
+            "source": "/uploads/(.*)",
+            "destination": "/public/uploads/$1"
         },
         {
-            "src": "/(.*)",
-            "dest": "/api/index.php"
+            "source": "/(.*)",
+            "destination": "/api/index.php"
         }
     ],
     "env": {
