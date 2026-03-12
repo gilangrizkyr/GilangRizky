@@ -64,10 +64,13 @@ class OptimizeBase64Images extends BaseCommand
             $tempFile = tempnam(sys_get_temp_dir(), 'img_opt');
             file_put_contents($tempFile, $imgData);
 
-            // Use CI Image service
             $image = \Config\Services::image()
-                ->withFile($tempFile)
-                ->resize($maxWidth, $maxWidth, true, 'height');
+                ->withFile($tempFile);
+
+            // Only resize if width > maxWidth
+            if ($image->getWidth() > $maxWidth) {
+                $image->resize($maxWidth, $maxWidth, true, 'height');
+            }
 
             // Save as JPEG with 60% quality
             $image->save($tempFile, 60);
