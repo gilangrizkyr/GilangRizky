@@ -70,24 +70,6 @@ class Bio extends BaseController
             $lanyardPath = 'data:' . $type . ';base64,' . base64_encode($data);
         }
 
-        // Open Graph Image
-        $ogImg = $this->request->getFile('og_image_upload');
-        $ogPath = $this->request->getPost('og_image');
-
-        if ($ogImg && $ogImg->isValid() && !$ogImg->hasMoved()) {
-            $tempPath = $ogImg->getTempName();
-
-            // Compress and Resize (OG recommended 1200x630)
-            \Config\Services::image()
-                ->withFile($tempPath)
-                ->resize(1200, 630, true)
-                ->save($tempPath, 60);
-
-            $type = 'image/jpeg';
-            $data = file_get_contents($tempPath);
-            $ogPath = 'data:' . $type . ';base64,' . base64_encode($data);
-        }
-
         $data = [
             'name' => $this->request->getPost('name'),
             'title' => $this->request->getPost('title'),
@@ -96,7 +78,6 @@ class Bio extends BaseController
             'email' => $this->request->getPost('email'),
             'photo' => $heroPath,
             'lanyard_photo' => $lanyardPath,
-            'og_image' => $ogPath,
         ];
 
         if ($model->update($id, $data)) {

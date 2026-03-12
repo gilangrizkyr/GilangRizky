@@ -14,7 +14,7 @@
     <?php
     $ogTitle = isset($page_title) ? esc($page_title) . ' | Gilang Rizky' : 'Gilang Rizky | Full-Stack Developer';
     $ogDesc = isset($meta_desc) ? esc($meta_desc) : 'Portfolio Gilang Rizky – Full-Stack Developer & Creative Engineer';
-    $ogImg = base_url('og-image');
+    $ogImg = base_url('assets/images/opengraph.png');
     ?>
     <meta property="og:type" content="website">
     <meta property="og:url" content="<?= current_url() ?>">
