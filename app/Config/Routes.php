@@ -8,6 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 
 // Home
 $routes->get('/', 'HomeController::index');
+$routes->get('og-image', 'HomeController::ogImage');
 
 // Projects
 $routes->get('projects', 'ProjectController::index');
