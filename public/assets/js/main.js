@@ -347,7 +347,7 @@ function escHtml(str) {
     const anchorY = 3.5;
     const ropeLength = 4.0;
 
-    // Drag
+    // Drag - Mouse
     let isDragging = false, isInView = false;
     const mouse = new THREE.Vector2();
     const raycaster = new THREE.Raycaster();
@@ -360,6 +360,7 @@ function escHtml(str) {
             canvas.style.cursor = 'grabbing';
         }
     });
+
     window.addEventListener('mousemove', e => {
         mouse.set(getMouseNDC(e).x, getMouseNDC(e).y);
         if (isDragging) {
@@ -368,9 +369,41 @@ function escHtml(str) {
             cardPos.lerp(vec, 0.3);
         }
     });
+
     window.addEventListener('mouseup', () => {
         isDragging = false;
         canvas.style.cursor = 'grab';
+    });
+
+    // Drag - Touch (Mobile)
+    canvas.addEventListener('touchstart', e => {
+        if (e.touches.length > 0) {
+            const touch = e.touches[0];
+            raycaster.setFromCamera(getMouseNDC(touch), camera);
+            const hits = raycaster.intersectObject(card);
+            if (hits.length) {
+                isDragging = true;
+                // Prevent scrolling while dragging lanyard
+                if (e.cancelable) e.preventDefault();
+            }
+        }
+    }, { passive: false });
+
+    window.addEventListener('touchmove', e => {
+        if (isDragging && e.touches.length > 0) {
+            const touch = e.touches[0];
+            const ndc = getMouseNDC(touch);
+            mouse.set(ndc.x, ndc.y);
+            const vec = new THREE.Vector3(mouse.x * 5, mouse.y * 5, 0);
+            cardVel.set(0, 0, 0);
+            cardPos.lerp(vec, 0.3);
+            // Prevent scrolling while moving lanyard
+            if (e.cancelable) e.preventDefault();
+        }
+    }, { passive: false });
+
+    window.addEventListener('touchend', () => {
+        isDragging = false;
     });
 
     function getMouseNDC(e) {
