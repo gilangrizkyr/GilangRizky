@@ -39,13 +39,9 @@ class Projects extends BaseController
         $imgName = $this->request->getPost('main_image_url');
 
         if ($img && $img->isValid() && !$img->hasMoved()) {
-            try {
-                $imgName = $img->getRandomName();
-                $img->move('uploads/projects', $imgName);
-                $imgName = '/uploads/projects/' . $imgName;
-            } catch (\Exception $e) {
-                return redirect()->back()->withInput()->with('error', 'Gagal upload gambar ke server Vercel (Read-only). Silakan gunakan kolom "Image URL" sebagai alternatif.');
-            }
+            $type = $img->getClientMimeType();
+            $data = file_get_contents($img->getTempName());
+            $imgName = 'data:' . $type . ';base64,' . base64_encode($data);
         }
 
         $data = [

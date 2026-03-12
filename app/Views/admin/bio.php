@@ -77,7 +77,7 @@
                     <div style="margin-top: 2rem; text-align: center;">
                         <div
                             style="display: inline-block; width: 100px; height: 100px; border-radius: 1.5rem; overflow: hidden; border: 1px solid var(--border); background: #111;">
-                            <img src="<?= str_starts_with($bio['photo'], 'http') ? esc($bio['photo']) : base_url($bio['photo']) ?>"
+                            <img src="<?= (str_starts_with($bio['photo'], 'http') || str_starts_with($bio['photo'], 'data:')) ? esc($bio['photo']) : base_url(esc($bio['photo'])) ?>"
                                 style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                     </div>
@@ -106,7 +106,7 @@
                     <div style="margin-top: 2rem; text-align: center;">
                         <div
                             style="display: inline-block; width: 100px; height: 100px; border-radius: 1.5rem; overflow: hidden; border: 1px solid var(--border); background: #111;">
-                            <img src="<?= str_starts_with($bio['lanyard_photo'], 'http') ? esc($bio['lanyard_photo']) : base_url($bio['lanyard_photo']) ?>"
+                            <img src="<?= (str_starts_with($bio['lanyard_photo'], 'http') || str_starts_with($bio['lanyard_photo'], 'data:')) ? esc($bio['lanyard_photo']) : base_url(esc($bio['lanyard_photo'])) ?>"
                                 style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                     </div>
