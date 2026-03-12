@@ -36,11 +36,16 @@ class Projects extends BaseController
         }
 
         $img = $this->request->getFile('main_image');
-        $imgName = '';
+        $imgName = $this->request->getPost('main_image_url');
+
         if ($img && $img->isValid() && !$img->hasMoved()) {
-            $imgName = $img->getRandomName();
-            $img->move('uploads/projects', $imgName);
-            $imgName = '/uploads/projects/' . $imgName;
+            try {
+                $imgName = $img->getRandomName();
+                $img->move('uploads/projects', $imgName);
+                $imgName = '/uploads/projects/' . $imgName;
+            } catch (\Exception $e) {
+                return redirect()->back()->withInput()->with('error', 'Gagal upload gambar ke server Vercel (Read-only). Silakan gunakan kolom "Image URL" sebagai alternatif.');
+            }
         }
 
         $data = [
@@ -90,16 +95,20 @@ class Projects extends BaseController
         $oldProject = $model->find($id);
 
         $img = $this->request->getFile('main_image');
-        $imgName = $oldProject['main_image'];
+        $imgName = $this->request->getPost('main_image_url') ?: $oldProject['main_image'];
 
         if ($img && $img->isValid() && !$img->hasMoved()) {
-            $imgName = $img->getRandomName();
-            $img->move('uploads/projects', $imgName);
-            $imgName = '/uploads/projects/' . $imgName;
+            try {
+                $imgName = $img->getRandomName();
+                $img->move('uploads/projects', $imgName);
+                $imgName = '/uploads/projects/' . $imgName;
 
-            // Delete old image if exists
-            if (!empty($oldProject['main_image']) && file_exists(FCPATH . $oldProject['main_image'])) {
-                @unlink(FCPATH . $oldProject['main_image']);
+                // Delete old image if exists
+                if (!empty($oldProject['main_image']) && file_exists(FCPATH . $oldProject['main_image'])) {
+                    @unlink(FCPATH . $oldProject['main_image']);
+                }
+            } catch (\Exception $e) {
+                return redirect()->back()->withInput()->with('error', 'Gagal upload gambar ke server Vercel (Read-only). Silakan gunakan kolom "Image URL" sebagai alternatif.');
             }
         }
 

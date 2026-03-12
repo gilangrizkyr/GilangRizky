@@ -39,13 +39,17 @@ class Bio extends BaseController
         $heroPath = $this->request->getPost('photo');
 
         if ($heroImg && $heroImg->isValid() && !$heroImg->hasMoved()) {
-            $imgName = $heroImg->getRandomName();
-            $heroImg->move('uploads/profile', $imgName);
-            $heroPath = '/uploads/profile/' . $imgName;
+            try {
+                $imgName = $heroImg->getRandomName();
+                $heroImg->move('uploads/profile', $imgName);
+                $heroPath = '/uploads/profile/' . $imgName;
 
-            $oldHero = $oldBio['photo'] ?? '';
-            if (!empty($oldHero) && str_contains($oldHero, '/uploads/profile/') && file_exists(FCPATH . $oldHero)) {
-                @unlink(FCPATH . $oldHero);
+                $oldHero = $oldBio['photo'] ?? '';
+                if (!empty($oldHero) && str_contains($oldHero, '/uploads/profile/') && file_exists(FCPATH . $oldHero)) {
+                    @unlink(FCPATH . $oldHero);
+                }
+            } catch (\Exception $e) {
+                return redirect()->back()->withInput()->with('error', 'Gagal upload foto ke server Vercel (Read-only). Silakan gunakan kolom "Photo URL" sebagai alternatif.');
             }
         }
 
@@ -54,13 +58,17 @@ class Bio extends BaseController
         $lanyardPath = $this->request->getPost('lanyard_photo');
 
         if ($lanyardImg && $lanyardImg->isValid() && !$lanyardImg->hasMoved()) {
-            $imgName = $lanyardImg->getRandomName();
-            $lanyardImg->move('uploads/profile', $imgName);
-            $lanyardPath = '/uploads/profile/' . $imgName;
+            try {
+                $imgName = $lanyardImg->getRandomName();
+                $lanyardImg->move('uploads/profile', $imgName);
+                $lanyardPath = '/uploads/profile/' . $imgName;
 
-            $oldLanyard = $oldBio['lanyard_photo'] ?? '';
-            if (!empty($oldLanyard) && str_contains($oldLanyard, '/uploads/profile/') && file_exists(FCPATH . $oldLanyard)) {
-                @unlink(FCPATH . $oldLanyard);
+                $oldLanyard = $oldBio['lanyard_photo'] ?? '';
+                if (!empty($oldLanyard) && str_contains($oldLanyard, '/uploads/profile/') && file_exists(FCPATH . $oldLanyard)) {
+                    @unlink(FCPATH . $oldLanyard);
+                }
+            } catch (\Exception $e) {
+                return redirect()->back()->withInput()->with('error', 'Gagal upload lanyard ke server Vercel (Read-only). Silakan gunakan kolom "Photo URL" sebagai alternatif.');
             }
         }
 
