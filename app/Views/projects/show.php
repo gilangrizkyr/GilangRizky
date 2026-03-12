@@ -64,7 +64,8 @@ $ptech = is_string($ptechRaw) ? (json_decode($ptechRaw, true) ?? []) : (is_array
         <!-- Image -->
         <?php if ($pimg): ?>
             <div class="detail-img">
-                <img src="<?= esc($pimg) ?>" alt="<?= esc($ptitle) ?>">
+                <img src="<?= (str_starts_with($pimg, 'http') || str_starts_with($pimg, 'data:')) ? esc($pimg) : base_url(esc($pimg)) ?>"
+                    alt="<?= esc($ptitle) ?>">
             </div>
         <?php endif; ?>
 

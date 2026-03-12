@@ -26,7 +26,8 @@
                     <a href="<?= base_url('projects/' . esc($pslug)) ?>" class="project-card">
                         <div class="project-card-img">
                             <?php if ($pimg): ?>
-                                <img src="<?= esc($pimg) ?>" alt="<?= esc($ptitle) ?>" loading="lazy">
+                                <img src="<?= (str_starts_with($pimg, 'http') || str_starts_with($pimg, 'data:')) ? esc($pimg) : base_url(esc($pimg)) ?>"
+                                    alt="<?= esc($ptitle) ?>" loading="lazy">
                             <?php else: ?>
                                 <div class="project-card-no-img">No Image</div>
                             <?php endif; ?>

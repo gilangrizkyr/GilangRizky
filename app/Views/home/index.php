@@ -50,7 +50,8 @@ $lastName = !empty($otherNames) ? esc(strtoupper(implode(' ', $otherNames))) : '
             <div class="hero-photo-glow"></div>
             <div class="hero-photo scroll-tilt parallax-wrap glass-panel-3d">
                 <?php if ($bioPhoto): ?>
-                    <img src="<?= base_url(esc($bioPhoto)) ?>" alt="<?= esc($bioName) ?>" class="parallax-layer">
+                    <img src="<?= (str_starts_with($bioPhoto, 'http') || str_starts_with($bioPhoto, 'data:')) ? esc($bioPhoto) : base_url(esc($bioPhoto)) ?>"
+                        alt="<?= esc($bioName) ?>" class="parallax-layer">
                 <?php else: ?>
                     <div class="hero-photo-placeholder">G.</div>
                 <?php endif; ?>
@@ -158,7 +159,8 @@ $lastName = !empty($otherNames) ? esc(strtoupper(implode(' ', $otherNames))) : '
                     <div class="project-image-wrap scroll-tilt parallax-wrap">
                         <div class="project-image glass-panel-3d">
                             <?php if ($pimg): ?>
-                                <img src="<?= esc($pimg) ?>" alt="<?= esc($ptitle) ?>" loading="lazy">
+                                <img src="<?= (str_starts_with($pimg, 'http') || str_starts_with($pimg, 'data:')) ? esc($pimg) : base_url(esc($pimg)) ?>"
+                                    alt="<?= esc($ptitle) ?>" loading="lazy">
                             <?php else: ?>
                                 <div
                                     style="width:100%;height:100%;background:#0a0a0a;display:flex;align-items:center;justify-content:center;color:#333;font-style:italic;font-size:.8rem;">
@@ -221,7 +223,7 @@ $lastName = !empty($otherNames) ? esc(strtoupper(implode(' ', $otherNames))) : '
         <div class="grid-box badge-box container-p-3d tilt-in-left">
             <div class="badge-canvas-wrap">
                 <canvas id="badge-canvas"
-                    data-photo="<?= $lanyardPhoto ? base_url(esc($lanyardPhoto)) : ($bioPhoto ? base_url(esc($bioPhoto)) : base_url('assets/images/profile.jpg')) ?>"></canvas>
+                    data-photo="<?= $lanyardPhoto ? ((str_starts_with($lanyardPhoto, 'http') || str_starts_with($lanyardPhoto, 'data:')) ? esc($lanyardPhoto) : base_url(esc($lanyardPhoto))) : ($bioPhoto ? ((str_starts_with($bioPhoto, 'http') || str_starts_with($bioPhoto, 'data:')) ? esc($bioPhoto) : base_url(esc($bioPhoto))) : base_url('assets/images/profile.jpg')) ?>"></canvas>
             </div>
             <div class="badge-label-v2">
                 <small>Creative Developer</small>

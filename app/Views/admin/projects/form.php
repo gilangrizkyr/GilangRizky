@@ -77,7 +77,7 @@
             <?php if (isset($project) && $project['main_image']): ?>
                 <div
                     style="margin-top: 1rem; width: 200px; border-radius: 1rem; overflow: hidden; border: 1px solid var(--border);">
-                    <img src="<?= str_starts_with($project['main_image'], 'http') ? esc($project['main_image']) : base_url($project['main_image']) ?>"
+                    <img src="<?= (str_starts_with($project['main_image'], 'http') || str_starts_with($project['main_image'], 'data:')) ? esc($project['main_image']) : base_url(esc($project['main_image'])) ?>"
                         style="width: 100%;">
                 </div>
                 <small style="display: block; margin-top: 0.5rem; color: var(--text-dim); font-size: 0.7rem;">Leave both

@@ -34,7 +34,7 @@
                         <div
                             style="width: 100px; height: 60px; border-radius: 0.5rem; overflow: hidden; background: #111; border: 1px solid var(--border);">
                             <?php if ($p['main_image']): ?>
-                                <img src="<?= base_url($p['main_image']) ?>"
+                                <img src="<?= (str_starts_with($p['main_image'], 'http') || str_starts_with($p['main_image'], 'data:')) ? esc($p['main_image']) : base_url(esc($p['main_image'])) ?>"
                                     style="width: 100%; height: 100%; object-fit: cover;">
                             <?php endif; ?>
                         </div>
