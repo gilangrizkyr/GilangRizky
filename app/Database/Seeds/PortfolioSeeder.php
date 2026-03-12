@@ -14,7 +14,7 @@ class PortfolioSeeder extends Seeder
             'id' => 1,
             'name' => 'Gilang Rizky',
             'title' => 'Full-Stack Developer & Creative Engineer',
-            'photo' => '/assets/images/profile.jpg',
+            'photo' => 'assets/images/profil.png',
             'github_url' => 'https://github.com/gilangrizkyr',
             'instagram_url' => 'https://instagram.com/gilangrizkyr',
             'email' => 'ikyappmastering@gmail.com',
