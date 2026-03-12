@@ -39,8 +39,16 @@ class Projects extends BaseController
         $imgName = $this->request->getPost('main_image_url');
 
         if ($img && $img->isValid() && !$img->hasMoved()) {
+            $tempPath = $img->getTempName();
+
+            // Compress and Resize
+            \Config\Services::image()
+                ->withFile($tempPath)
+                ->resize(1200, 1200, true, 'height')
+                ->save($tempPath, 70);
+
             $type = $img->getClientMimeType();
-            $data = file_get_contents($img->getTempName());
+            $data = file_get_contents($tempPath);
             $imgName = 'data:' . $type . ';base64,' . base64_encode($data);
         }
 
@@ -94,8 +102,16 @@ class Projects extends BaseController
         $imgName = $this->request->getPost('main_image_url') ?: $oldProject['main_image'];
 
         if ($img && $img->isValid() && !$img->hasMoved()) {
+            $tempPath = $img->getTempName();
+
+            // Compress and Resize
+            \Config\Services::image()
+                ->withFile($tempPath)
+                ->resize(1200, 1200, true, 'height')
+                ->save($tempPath, 70);
+
             $type = $img->getClientMimeType();
-            $data = file_get_contents($img->getTempName());
+            $data = file_get_contents($tempPath);
             $imgName = 'data:' . $type . ';base64,' . base64_encode($data);
         }
 

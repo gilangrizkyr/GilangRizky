@@ -39,8 +39,16 @@ class Bio extends BaseController
         $heroPath = $this->request->getPost('photo');
 
         if ($heroImg && $heroImg->isValid() && !$heroImg->hasMoved()) {
+            $tempPath = $heroImg->getTempName();
+
+            // Compress and Resize using CI4 Image service
+            \Config\Services::image()
+                ->withFile($tempPath)
+                ->resize(1200, 1200, true, 'height')
+                ->save($tempPath, 70);
+
             $type = $heroImg->getClientMimeType();
-            $data = file_get_contents($heroImg->getTempName());
+            $data = file_get_contents($tempPath);
             $heroPath = 'data:' . $type . ';base64,' . base64_encode($data);
         }
 
@@ -49,8 +57,16 @@ class Bio extends BaseController
         $lanyardPath = $this->request->getPost('lanyard_photo');
 
         if ($lanyardImg && $lanyardImg->isValid() && !$lanyardImg->hasMoved()) {
+            $tempPath = $lanyardImg->getTempName();
+
+            // Compress and Resize
+            \Config\Services::image()
+                ->withFile($tempPath)
+                ->resize(800, 800, true, 'height')
+                ->save($tempPath, 70);
+
             $type = $lanyardImg->getClientMimeType();
-            $data = file_get_contents($lanyardImg->getTempName());
+            $data = file_get_contents($tempPath);
             $lanyardPath = 'data:' . $type . ';base64,' . base64_encode($data);
         }
 
